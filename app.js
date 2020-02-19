@@ -13,7 +13,7 @@ let logger = require("morgan");
 let ticketsApi = require("./routes/tickets");
 let attendeesApi = require("./routes/attendees");
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 mongoose
   .connect(config.MONGODB_CONNECTION, {
