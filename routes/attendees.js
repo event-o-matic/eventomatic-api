@@ -10,62 +10,62 @@ router.get("/", async (req, res) => {
   res.json(result);
 });
 
-router.get("/:id", (req, res) => {
-  //   get one
-});
+// router.get("/:id", (req, res) => {
+//   //   get one
+// });
 
-router.post("/import", (req, res, next) => {
-  let attendees = [];
-  try {
-    fs.createReadStream("./data/attendees.csv")
-      .pipe(csv())
-      .on("data", row => {
-        attendees.push({
-          fullname: row.name,
-          email: row.email,
-          category: row.category
-        });
-      })
-      .on("end", async () => {
-        // console.log(attendees);
+// router.post("/import", (req, res, next) => {
+//   let attendees = [];
+//   try {
+//     fs.createReadStream("./data/attendees.csv")
+//       .pipe(csv())
+//       .on("data", row => {
+//         attendees.push({
+//           fullname: row.name,
+//           email: row.email,
+//           category: row.category
+//         });
+//       })
+//       .on("end", async () => {
+//         // console.log(attendees);
 
-        const dbAttendees = await Attendee.find();
+//         const dbAttendees = await Attendee.find();
 
-        // Only need emails of all db attendees
-        const dbAttendeeEmails = dbAttendees.map(
-          dbAttendee => dbAttendee.email
-        );
+//         // Only need emails of all db attendees
+//         const dbAttendeeEmails = dbAttendees.map(
+//           dbAttendee => dbAttendee.email
+//         );
 
-        // filter out only new entries of email
-        attendees = attendees.filter(
-          attendee => dbAttendeeEmails.indexOf(attendee.email) === -1
-        );
-        // const result = [];
-        const result = await Attendee.insertMany(attendees);
-        return res.json({
-          success: true,
-          msg: `Imported ${result.length} attendees successfully!`,
-          insertedCount: result.length
-        });
-      });
-  } catch (e) {
-    next(e);
-  }
-});
+//         // filter out only new entries of email
+//         attendees = attendees.filter(
+//           attendee => dbAttendeeEmails.indexOf(attendee.email) === -1
+//         );
+//         // const result = [];
+//         const result = await Attendee.insertMany(attendees);
+//         return res.json({
+//           success: true,
+//           msg: `Imported ${result.length} attendees successfully!`,
+//           insertedCount: result.length
+//         });
+//       });
+//   } catch (e) {
+//     next(e);
+//   }
+// });
 
-router.post("/addone", async (req, res, next) => {
-  try {
-    const newAttendee = new Attendee({
-      email: "test4@test.com",
-      fullname: "dummy three"
-    });
+// router.post("/addone", async (req, res, next) => {
+//   try {
+//     const newAttendee = new Attendee({
+//       email: "test4@test.com",
+//       fullname: "dummy three"
+//     });
 
-    await newAttendee.save();
-    return res.json({ success: true, msg: "Attendee added successfully!" });
-  } catch (e) {
-    next(e);
-  }
-});
+//     await newAttendee.save();
+//     return res.json({ success: true, msg: "Attendee added successfully!" });
+//   } catch (e) {
+//     next(e);
+//   }
+// });
 
 // router.delete("/", async (req, res, next) => {
 //   try {
