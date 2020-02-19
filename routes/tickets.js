@@ -151,9 +151,9 @@ router.post("/generateQRCode", async (req, res, next) => {
   try {
     const dbAttendees = await Attendee.find();
 
-    dbAttendees.forEach(a => {
+    dbAttendees.forEach(attendee => {
       // console.log(typeof a._id);
-      generateQRCode(a._id);
+      generateQRCode(attendee);
     });
     return res.json({
       success: true,
@@ -169,13 +169,18 @@ function sendEmail(to, body) {
   console.log(`sending email to ${to}`);
 }
 
-function generateQRCode(id) {
-  QRCode.toDataURL(`${id}`, { version: 2 }, function(err, url) {
+function generateQRCode(attendee) {
+  QRCode.toDataURL(`${attendee._id}`, { version: 2 }, function(err, url) {
     if (err) throw err;
     const base64Data = url.replace(/^data:image\/png;base64,/, "");
-    fs.writeFile("qrcodes/" + id + ".png", base64Data, "base64", function(err) {
-      if (err) throw err;
-    });
+    fs.writeFile(
+      "qrcodes/" + attendee.category + "-" + attendee.fullname + ".png",
+      base64Data,
+      "base64",
+      function(err) {
+        if (err) throw err;
+      }
+    );
   });
 }
 module.exports = router;

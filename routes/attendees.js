@@ -22,7 +22,8 @@ router.post("/import", (req, res, next) => {
       .on("data", row => {
         attendees.push({
           fullname: row.name,
-          email: row.email
+          email: row.email,
+          category: row.category
         });
       })
       .on("end", async () => {
@@ -66,13 +67,13 @@ router.post("/addone", async (req, res, next) => {
   }
 });
 
-router.delete("/", async (req, res, next) => {
-  try {
-    await Attendee.deleteMany();
-    return res.json({ success: true, msg: "All Attendee deleted!" });
-  } catch (e) {
-    next(e);
-  }
-});
+// router.delete("/", async (req, res, next) => {
+//   try {
+//     await Attendee.deleteMany();
+//     return res.json({ success: true, msg: "All Attendee deleted!" });
+//   } catch (e) {
+//     next(e);
+//   }
+// });
 
 module.exports = router;
