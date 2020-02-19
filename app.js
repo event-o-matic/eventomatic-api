@@ -8,7 +8,6 @@ let flash = require("connect-flash");
 
 let session = require("express-session");
 let cookieParser = require("cookie-parser");
-let logger = require("morgan");
 
 let ticketsApi = require("./routes/tickets");
 let attendeesApi = require("./routes/attendees");
@@ -24,7 +23,6 @@ mongoose
     console.log("Database connection established successfully!");
   });
 
-app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
