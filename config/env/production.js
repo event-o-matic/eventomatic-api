@@ -1,3 +1,3 @@
 module.exports = {
-    value: process.env.VALUE
+  MONGODB_CONNECTION: process.env.MONGODB_CONNECTION
 };

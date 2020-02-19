@@ -11,9 +11,6 @@ let cookieParser = require("cookie-parser");
 
 let ticketsApi = require("./routes/tickets");
 let attendeesApi = require("./routes/attendees");
-
-const PORT = process.env.PORT || 5000;
-
 mongoose
   .connect(config.MONGODB_CONNECTION, {
     useNewUrlParser: true,
@@ -59,6 +56,7 @@ app.use(function(err, req, res, next) {
   res.json({ success: false, error: "Somthing is wrong!" });
 });
 
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}...`));
 
 // Handle UnhandeledExceptions
