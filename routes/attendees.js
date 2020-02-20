@@ -9,6 +9,11 @@ router.get("/", async (req, res) => {
   const result = await Attendee.find();
   res.json(result);
 });
+router.get("/:category", async (req, res) => {
+  console.log(req.params.category);
+  const result = await Attendee.find({ category: req.params.category });
+  res.json(result);
+});
 
 // router.get("/:id", (req, res) => {
 //   //   get one

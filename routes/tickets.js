@@ -132,15 +132,18 @@ router.post("/check/:util", async (req, res, next) => {
 // TODO: Will Open before open
 // router.post("/sendQRCodeEmails", async (req, res, next) => {
 //   try {
-//     const dbAttendees = await Attendee.find();
+//     // const dbAttendees = await Attendee.find();
 
-//     dbAttendees.forEach(attendee => {
-//       generateQRCode(attendee);
-//       sendEmail(attendee);
+//     const dbAttendees = await Attendee.find({ category: "test" });
+//     // console.log(result);
+//     dbAttendees.forEach(a => {
+//       if (a.email) {
+//         sendEmail(a);
+//       }
 //     });
 //     return res.json({
 //       success: true,
-//       msg: `${dbAttendees.length} mails sent`
+//       msg: `${dbAttendees.length} mails sent.`
 //     });
 //   } catch (e) {
 //     next(e);
@@ -165,14 +168,23 @@ router.post("/generateQRCode", async (req, res, next) => {
 
 router.post("/sendDemoEmail", async (req, res, next) => {
   try {
-    // const demoAttendee = await Attendee.find({ fullname: "Dr. Darshee Baxi" });
-    const demoAttendee = new Attendee({
-      _id: "5e4d1362853d842a10509cab",
-      fullname: "Pruthvi Patel",
-      email: "pruthvipatel145@gmail.com",
-      category: "test"
+    // const demoAttendee = await Attendee.findOne({
+    //   fullname: "Dr. Darshee Baxi"
+    // });
+    // const demoAttendee = new Attendee({
+    //   _id: "5e4d1362853d842a10509cab",
+    //   fullname: "Pruthvi Patel",
+    //   email: "pruthvipatel145@gmail.com",
+    //   category: "test"
+    // });
+    const result = await Attendee.find({ category: "test" });
+    // console.log(result);
+    result.forEach(a => {
+      if (a.email) {
+        sendEmail(a);
+      }
     });
-    sendEmail(demoAttendee);
+
     res.json(true);
   } catch (e) {
     next(e);
