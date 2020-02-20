@@ -8,6 +8,7 @@ const sgMail = require("@sendgrid/mail");
 const mongoose = require("mongoose");
 const Attendee = require("../models/Attendee");
 const { avalibleUtils } = require("../helpers/constants");
+const nodemailer = require("nodemailer");
 
 sgMail.setApiKey(config.SENDGRID_API_KEY);
 const ticketsFromCsv = [];
@@ -128,31 +129,29 @@ router.post("/check/:util", async (req, res, next) => {
     next(e);
   }
 });
+// TODO: Will Open before open
+// router.post("/sendQRCodeEmails", async (req, res, next) => {
+//   try {
+//     const dbAttendees = await Attendee.find();
 
-router.post("/sendQRCodeEmails", async (req, res, next) => {
-  try {
-    const dbAttendees = await Attendee.find();
-
-    dbAttendees.forEach(a => {
-      // console.log(typeof a._id);
-      generateQRCode(a._id);
-      sendEmail(a.email);
-    });
-    return res.json({
-      success: true,
-      msg: `${dbAttendees.length} mails sent`
-    });
-  } catch (e) {
-    next(e);
-  }
-});
+//     dbAttendees.forEach(attendee => {
+//       generateQRCode(attendee);
+//       sendEmail(attendee);
+//     });
+//     return res.json({
+//       success: true,
+//       msg: `${dbAttendees.length} mails sent`
+//     });
+//   } catch (e) {
+//     next(e);
+//   }
+// });
 
 router.post("/generateQRCode", async (req, res, next) => {
   try {
     const dbAttendees = await Attendee.find();
 
     dbAttendees.forEach(attendee => {
-      // console.log(typeof a._id);
       generateQRCode(attendee);
     });
     return res.json({
@@ -164,23 +163,81 @@ router.post("/generateQRCode", async (req, res, next) => {
   }
 });
 
-function sendEmail(to, body) {
-  // TODO: add logic for sending email
-  console.log(`sending email to ${to}`);
+router.post("/sendDemoEmail", async (req, res, next) => {
+  try {
+    // const demoAttendee = await Attendee.find({ fullname: "Dr. Darshee Baxi" });
+    const demoAttendee = new Attendee({
+      _id: "5e4d1362853d842a10509cab",
+      fullname: "Pruthvi Patel",
+      email: "pruthvipatel145@gmail.com",
+      category: "test"
+    });
+    sendEmail(demoAttendee);
+    res.json(true);
+  } catch (e) {
+    next(e);
+  }
+});
+
+function sendEmail(attendee) {
+  generateQRCode(attendee, false, imageData => {
+    // console.log(imageData);
+    var transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      requireTLS: true,
+      auth: {
+        user: "pruthvipatel2000@gmail.com",
+        pass: "pruthvi1452000"
+      }
+    });
+
+    var mailOptions = {
+      from: "shahdarsh364@gmail.com",
+      to: attendee.email,
+      subject: "Your QRCode to attend ICRED International Conference 2020.",
+      text: `Hello ${attendee.fullname} <br/>Here is your QRCode to attend ICRED International Conference 2020.`,
+      attachments: [
+        {
+          filename: attendee.category + "-" + attendee.fullname + ".png",
+          type: "image/png",
+          content: imageData,
+          content_id: "QRCode",
+          disposition: "attachment",
+          encoding: "base64"
+        }
+      ],
+      html: `Hello ${attendee.fullname},<br/><br/>Thank you so much for registering for <b>ICRED International 2020.</b><br/><br/>Here is your <b>QRCode</b> to attend ICRED International Conference 2020.We hope to see you at the event.<br/><br/>Regards,<br/>Navrachana University, Vadodara.`
+    };
+    // console.log(mailOptions);
+
+    transporter.sendMail(mailOptions, function(error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email sent: " + info.response);
+      }
+    });
+  });
 }
 
-function generateQRCode(attendee) {
+function generateQRCode(attendee, save = true, callback) {
   QRCode.toDataURL(`${attendee._id}`, { version: 2 }, function(err, url) {
     if (err) throw err;
     const base64Data = url.replace(/^data:image\/png;base64,/, "");
-    fs.writeFile(
-      "qrcodes/" + attendee.category + "-" + attendee.fullname + ".png",
-      base64Data,
-      "base64",
-      function(err) {
-        if (err) throw err;
-      }
-    );
+    if (save) {
+      fs.writeFile(
+        "qrcodes/" + attendee.category + "-" + attendee.fullname + ".png",
+        base64Data,
+        "base64",
+        function(err) {
+          if (err) throw err;
+        }
+      );
+    }
+
+    callback(base64Data);
   });
 }
 module.exports = router;
