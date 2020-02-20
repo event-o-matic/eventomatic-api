@@ -153,7 +153,7 @@ router.post("/check/:util", async (req, res, next) => {
 router.post("/generateQRCode", async (req, res, next) => {
   try {
     const dbAttendees = await Attendee.find();
-
+    // console.log(dbAttendees.length);
     dbAttendees.forEach(attendee => {
       generateQRCode(attendee);
     });
@@ -233,10 +233,12 @@ function sendEmail(attendee) {
     });
   });
 }
-
 function generateQRCode(attendee, save = true, callback) {
   QRCode.toDataURL(`${attendee._id}`, { version: 2 }, function(err, url) {
-    if (err) throw err;
+    if (err) {
+      console.log(err);
+      throw err;
+    }
     const base64Data = url.replace(/^data:image\/png;base64,/, "");
     if (save) {
       fs.writeFile(
@@ -244,12 +246,16 @@ function generateQRCode(attendee, save = true, callback) {
         base64Data,
         "base64",
         function(err) {
-          if (err) throw err;
+          if (err) {
+            console.log(err);
+            throw err;
+          }
         }
       );
     }
 
-    callback(base64Data);
+    if (callback) callback(base64Data);
   });
 }
+
 module.exports = router;

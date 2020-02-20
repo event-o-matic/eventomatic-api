@@ -7,11 +7,15 @@ const csv = require("csv-parser");
 
 router.get("/", async (req, res) => {
   const result = await Attendee.find();
+  console.log(result.length);
   res.json(result);
 });
+
 router.get("/:category", async (req, res) => {
-  console.log(req.params.category);
-  const result = await Attendee.find({ category: req.params.category });
+  const result = await Attendee.find({ category: req.params.category })
+    .select("fullname -_id")
+    .sort("fullname");
+  console.log(result.length);
   res.json(result);
 });
 
@@ -40,11 +44,11 @@ router.get("/:category", async (req, res) => {
 //         const dbAttendeeEmails = dbAttendees.map(
 //           dbAttendee => dbAttendee.email
 //         );
-
 //         // filter out only new entries of email
 //         attendees = attendees.filter(
 //           attendee => dbAttendeeEmails.indexOf(attendee.email) === -1
 //         );
+//         // console.log(attendees);
 //         // const result = [];
 //         const result = await Attendee.insertMany(attendees);
 //         return res.json({
@@ -80,5 +84,18 @@ router.get("/:category", async (req, res) => {
 //     next(e);
 //   }
 // });
+
+router.post("/resetUtils", async (req, res, next) => {
+  try {
+    const result = await Attendee.updateMany({}, { $set: { utils: [] } });
+
+    return res.json({
+      success: true,
+      msg: `${result.n} utililies updated.`
+    });
+  } catch (e) {
+    next(e);
+  }
+});
 
 module.exports = router;
