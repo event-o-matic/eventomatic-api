@@ -208,7 +208,7 @@ function sendEmail(attendee) {
           encoding: "base64"
         }
       ],
-      html: `Hello ${attendee.fullname},<br/><br/>Thank you so much for registering for <b>ICRED International 2020.</b><br/><br/>Here is your <b>QRCode</b> to attend ICRED International Conference 2020.We hope to see you at the event.<br/><br/>Regards,<br/>Navrachana University, Vadodara.`
+      html: `Hello ${attendee.fullname},<br/><br/>Thank you so much for registering for <b>ICRED International 2020.</b><br/><br/>Here is your <b>QRCode</b> to attend ICRED International Conference 2020.We hope to see you at the event.<br/><br/>Regards,<br/>Navrachana University,<br/>Vadodara.`
     };
     // console.log(mailOptions);
 
