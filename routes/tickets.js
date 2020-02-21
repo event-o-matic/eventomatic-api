@@ -22,6 +22,8 @@ router.post("/check/:util", async (req, res, next) => {
       .json({ success: false, error: "No user id provided!" });
   }
 
+  const msg = "";
+
   try {
     const id = req.body.id;
     const dbAttendee = await Attendee.findById(id);
@@ -32,7 +34,7 @@ router.post("/check/:util", async (req, res, next) => {
     if (utils.indexOf(reqUtil) !== -1)
       return res.status(400).json({
         success: false,
-        error: `user already consumed ${reqUtil}!`
+        error: `user already recived ${reqUtil}!`
       });
 
     utils.push(reqUtil);
@@ -40,7 +42,7 @@ router.post("/check/:util", async (req, res, next) => {
     await dbAttendee.save();
     return res.json({
       success: true,
-      msg: `${dbAttendee.fullname} consumed ${reqUtil} successfully.`
+      msg: `${dbAttendee.fullname} recived ${reqUtil} successfully.`
     });
   } catch (e) {
     next(e);
