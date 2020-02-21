@@ -132,15 +132,18 @@ router.post("/check/:util", async (req, res, next) => {
 // TODO: Will Open before open
 // router.post("/sendQRCodeEmails", async (req, res, next) => {
 //   try {
-//     const dbAttendees = await Attendee.find();
+//     // const dbAttendees = await Attendee.find();
 
-//     dbAttendees.forEach(attendee => {
-//       generateQRCode(attendee);
-//       sendEmail(attendee);
+//     const dbAttendees = await Attendee.find({ category: "test" });
+//     // console.log(result);
+//     dbAttendees.forEach(a => {
+//       if (a.email) {
+//         sendEmail(a);
+//       }
 //     });
 //     return res.json({
 //       success: true,
-//       msg: `${dbAttendees.length} mails sent`
+//       msg: `${dbAttendees.length} mails sent.`
 //     });
 //   } catch (e) {
 //     next(e);
@@ -150,7 +153,7 @@ router.post("/check/:util", async (req, res, next) => {
 router.post("/generateQRCode", async (req, res, next) => {
   try {
     const dbAttendees = await Attendee.find();
-
+    // console.log(dbAttendees.length);
     dbAttendees.forEach(attendee => {
       generateQRCode(attendee);
     });
@@ -165,14 +168,23 @@ router.post("/generateQRCode", async (req, res, next) => {
 
 router.post("/sendDemoEmail", async (req, res, next) => {
   try {
-    // const demoAttendee = await Attendee.find({ fullname: "Dr. Darshee Baxi" });
-    const demoAttendee = new Attendee({
-      _id: "5e4d1362853d842a10509cab",
-      fullname: "Pruthvi Patel",
-      email: "pruthvipatel145@gmail.com",
-      category: "test"
+    // const demoAttendee = await Attendee.findOne({
+    //   fullname: "Dr. Darshee Baxi"
+    // });
+    // const demoAttendee = new Attendee({
+    //   _id: "5e4d1362853d842a10509cab",
+    //   fullname: "Pruthvi Patel",
+    //   email: "pruthvipatel145@gmail.com",
+    //   category: "test"
+    // });
+    const result = await Attendee.find({ category: "test" });
+    // console.log(result);
+    result.forEach(a => {
+      if (a.email) {
+        sendEmail(a);
+      }
     });
-    sendEmail(demoAttendee);
+
     res.json(true);
   } catch (e) {
     next(e);
@@ -221,10 +233,12 @@ function sendEmail(attendee) {
     });
   });
 }
-
 function generateQRCode(attendee, save = true, callback) {
   QRCode.toDataURL(`${attendee._id}`, { version: 2 }, function(err, url) {
-    if (err) throw err;
+    if (err) {
+      console.log(err);
+      throw err;
+    }
     const base64Data = url.replace(/^data:image\/png;base64,/, "");
     if (save) {
       fs.writeFile(
@@ -232,12 +246,16 @@ function generateQRCode(attendee, save = true, callback) {
         base64Data,
         "base64",
         function(err) {
-          if (err) throw err;
+          if (err) {
+            console.log(err);
+            throw err;
+          }
         }
       );
     }
 
-    callback(base64Data);
+    if (callback) callback(base64Data);
   });
 }
+
 module.exports = router;
