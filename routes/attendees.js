@@ -8,12 +8,13 @@ router.get("/", async (req, res) => {
   res.json(result);
 });
 
-router.get("/:category", async (req, res) => {
-  const result = await Attendee.find({ category: req.params.category })
-    .select("fullname -_id")
-    .sort("fullname");
-  console.log(result.length);
-  res.json(result);
+router.get("/c/:category", async (req, res) => {
+  const result = await Attendee.find({ category: req.params.category });
+  res.json({ count: result.length, data: result });
+});
+router.get("/u/:util", async (req, res) => {
+  const result = await Attendee.find({ utils: { $in: req.params.util } });
+  res.json({ count: result.length, data: result });
 });
 
 // router.get("/:id", (req, res) => {
@@ -81,6 +82,7 @@ router.get("/:category", async (req, res) => {
 //     next(e);
 //   }
 // });
+<<<<<<< Updated upstream
 
 router.get("/c/:category", async (req, res) => {
   const result = await Attendee.find({ category: req.params.category });
@@ -90,6 +92,8 @@ router.get("/u/:util", async (req, res) => {
   const result = await Attendee.find({ utils: { $in: req.params.util } });
   res.json({ count: result.length, data: result });
 });
+=======
+>>>>>>> Stashed changes
 
 router.post("/resetUtils", async (req, res, next) => {
   try {
@@ -124,5 +128,7 @@ router.post("/resetUtil/:util", async (req, res, next) => {
     next(e);
   }
 });
+
+router.post("/export", (req, res, next) => {});
 
 module.exports = router;
