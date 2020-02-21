@@ -81,8 +81,6 @@ router.get("/:category", async (req, res) => {
 //     next(e);
 //   }
 // });
-  res.json({ count: result.length, data: result });
-});
 
 router.get("/c/:category", async (req, res) => {
   const result = await Attendee.find({ category: req.params.category });
@@ -95,11 +93,32 @@ router.get("/u/:util", async (req, res) => {
 
 router.post("/resetUtils", async (req, res, next) => {
   try {
-    const result = await Attendee.updateMany({}, { $set: { utils: [] } });
+    const result = await Attendee.updateMany(
+      { utils: { $ne: [] } },
+      { $set: { utils: [] } }
+    );
 
     return res.json({
       success: true,
       msg: `${result.n} utililies updated.`
+    });
+  } catch (e) {
+    next(e);
+  }
+});
+router.post("/resetUtil/:util", async (req, res, next) => {
+  try {
+    const dbAttendees = await Attendee.where("utils").ne([]);
+
+    dbAttendees.forEach(async dbAttendee => {
+      let utils = dbAttendee.utils;
+      utils = utils.filter(util => util !== req.params.util);
+      dbAttendee.utils = utils;
+      await dbAttendee.save();
+    });
+    return res.json({
+      success: true,
+      msg: `${req.params.util} is reset.`
     });
   } catch (e) {
     next(e);
