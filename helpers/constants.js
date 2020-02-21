@@ -4,7 +4,6 @@ module.exports.avalibleUtils = [
   "regkit",
   "breakfast",
   "lunch",
-  "hitea",
   "dinner",
   "prize",
   "certificate"
