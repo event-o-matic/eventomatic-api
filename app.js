@@ -11,6 +11,7 @@ let cookieParser = require("cookie-parser");
 
 let ticketsApi = require("./routes/tickets");
 let attendeesApi = require("./routes/attendees");
+let categoriesApi = require("./routes/categories");
 mongoose
   .connect(config.MONGODB_CONNECTION, {
     useNewUrlParser: true,
@@ -39,6 +40,7 @@ app.use(flash());
 app.get("/", (req, res) => res.send("Welcome to Eventomatic API."));
 app.use("/tickets/", ticketsApi);
 app.use("/attendees/", attendeesApi);
+app.use("/categories/", categoriesApi);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

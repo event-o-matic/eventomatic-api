@@ -1,9 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
 const Attendee = require("../models/Attendee");
-const fs = require("fs");
-const csv = require("csv-parser");
 
 router.get("/", async (req, res) => {
   const result = await Attendee.find();
@@ -84,6 +81,17 @@ router.get("/:category", async (req, res) => {
 //     next(e);
 //   }
 // });
+  res.json({ count: result.length, data: result });
+});
+
+router.get("/c/:category", async (req, res) => {
+  const result = await Attendee.find({ category: req.params.category });
+  res.json({ count: result.length, data: result });
+});
+router.get("/u/:util", async (req, res) => {
+  const result = await Attendee.find({ utils: { $in: req.params.util } });
+  res.json({ count: result.length, data: result });
+});
 
 router.post("/resetUtils", async (req, res, next) => {
   try {
