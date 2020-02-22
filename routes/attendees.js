@@ -17,10 +17,6 @@ router.get("/u/:util", async (req, res) => {
   res.json({ count: result.length, data: result });
 });
 
-// router.get("/:id", (req, res) => {
-//   //   get one
-// });
-
 // router.post("/import", (req, res, next) => {
 //   let attendees = [];
 //   try {
@@ -116,7 +112,5 @@ router.post("/resetUtil/:util", async (req, res, next) => {
     next(e);
   }
 });
-
-router.post("/export", (req, res, next) => {});
 
 module.exports = router;
