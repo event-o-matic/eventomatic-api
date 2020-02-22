@@ -34,7 +34,7 @@ router.post("/check/:util", async (req, res, next) => {
     if (utils.indexOf(reqUtil) !== -1)
       return res.status(400).json({
         success: false,
-        error: `user already recived ${reqUtil}!`
+        error: `user already received ${reqUtil}!`
       });
 
     utils.push(reqUtil);
@@ -42,7 +42,7 @@ router.post("/check/:util", async (req, res, next) => {
     await dbAttendee.save();
     return res.json({
       success: true,
-      msg: `${dbAttendee.fullname} recived ${reqUtil} successfully.`
+      msg: `${dbAttendee.fullname} received ${reqUtil} successfully.`
     });
   } catch (e) {
     next(e);
