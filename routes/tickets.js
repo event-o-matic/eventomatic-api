@@ -4,6 +4,8 @@ const router = express.Router();
 const sgMail = require("@sendgrid/mail");
 const Attendee = require("../models/Attendee");
 const { avalibleUtils } = require("../helpers/constants");
+const QRCode = require("qrcode");
+const fs = require("fs");
 
 // [AUTHOR: PRUTHVI PATEL]
 router.post("/check/:util", async (req, res, next) => {
@@ -65,7 +67,7 @@ router.post("/check/:util", async (req, res, next) => {
 //   }
 // });
 
-// router.post("/generateQRCode", async (req, res, next) => {
+// router.post("/generateQRCodes", async (req, res, next) => {
 //   try {
 //     const dbAttendees = await Attendee.find();
 //     // console.log(dbAttendees.length);
@@ -75,6 +77,25 @@ router.post("/check/:util", async (req, res, next) => {
 //     return res.json({
 //       success: true,
 //       msg: `${dbAttendees.length} QR codes generated.`
+//     });
+//   } catch (e) {
+//     next(e);
+//   }
+// });
+// router.post("/generateQRCode/:id", async (req, res, next) => {
+//   try {
+//     if (!req.params.id)
+//       return res
+//         .status(400)
+//         .json({ success: false, error: "User ID is not provided." });
+//     const dbAttendee = await Attendee.findById(req.params.id);
+//     if (!dbAttendee)
+//       return res.status(404).json({ success: false, error: "No user found." });
+//     // console.log(dbAttendees.length);
+//     generateQRCode(dbAttendee);
+//     return res.json({
+//       success: true,
+//       msg: ` QR code generated for ${dbAttendee.fullname}.`
 //     });
 //   } catch (e) {
 //     next(e);
