@@ -82,18 +82,6 @@ router.get("/u/:util", async (req, res) => {
 //     next(e);
 //   }
 // });
-<<<<<<< Updated upstream
-
-router.get("/c/:category", async (req, res) => {
-  const result = await Attendee.find({ category: req.params.category });
-  res.json({ count: result.length, data: result });
-});
-router.get("/u/:util", async (req, res) => {
-  const result = await Attendee.find({ utils: { $in: req.params.util } });
-  res.json({ count: result.length, data: result });
-});
-=======
->>>>>>> Stashed changes
 
 router.post("/resetUtils", async (req, res, next) => {
   try {
