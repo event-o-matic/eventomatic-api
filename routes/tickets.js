@@ -34,7 +34,7 @@ router.post("/check/:util", async (req, res, next) => {
     if (utils.indexOf(reqUtil) !== -1)
       return res.status(400).json({
         success: false,
-        error: `user already received ${reqUtil}!`
+        error: `${dbAttendee.fullname} already received ${reqUtil}!`
       });
 
     utils.push(reqUtil);
