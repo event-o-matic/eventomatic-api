@@ -6,6 +6,8 @@ const Attendee = require("../models/Attendee");
 const { avalibleUtils } = require("../helpers/constants");
 const QRCode = require("qrcode");
 const fs = require("fs");
+var QrCode = require("qrcode-reader");
+var qr = new QrCode();
 
 // [AUTHOR: PRUTHVI PATEL]
 router.post("/check/:util", async (req, res, next) => {
@@ -46,6 +48,9 @@ router.post("/check/:util", async (req, res, next) => {
     next(e);
   }
 });
+
+router.post("/test", (req, res, next) => {});
+
 // TODO: Will Open before open
 // router.post("/sendQRCodeEmails", async (req, res, next) => {
 //   try {

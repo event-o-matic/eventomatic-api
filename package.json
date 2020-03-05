@@ -18,7 +18,8 @@
     "jsonfile": "^5.0.0",
     "mongoose": "^5.5.15",
     "nodemailer": "^6.4.2",
-    "qrcode": "^1.4.1"
+    "qrcode": "^1.4.1",
+    "qrcode-reader": "^1.0.4"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"
