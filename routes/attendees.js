@@ -7,6 +7,11 @@ router.get("/", async (req, res) => {
   res.json({ count: result.length, data: result });
 });
 
+router.get("/:id", async (req, res) => {
+  const result = await Attendee.findById(req.params.id);
+  res.json({ count: result.length, data: result });
+});
+
 router.get("/c/:category", async (req, res) => {
   const result = await Attendee.find({ category: req.params.category });
   res.json({ count: result.length, data: result });
@@ -14,6 +19,21 @@ router.get("/c/:category", async (req, res) => {
 router.get("/u/:util", async (req, res) => {
   const result = await Attendee.find({ utils: { $in: req.params.util } });
   res.json({ count: result.length, data: result });
+});
+
+
+
+router.post("/resetUtils", async (req, res, next) => {
+  try {
+    const result = await Attendee.updateMany({}, { $set: { utils: [] } });
+
+    return res.json({
+      success: true,
+      msg: `${result.n} utililies updated.`
+    });
+  } catch (e) {
+    next(e);
+  }
 });
 
 module.exports = router;
