@@ -1,0 +1,67 @@
+=========================================
+|     EVENTOMATIC API - DOCUMENTATION	|
+=========================================
+
+Author: Pruthvi Patel
+Repository(private): https://github.com/pruthvi145/eventomatic-api
+Git Branches: 
+	1. Master - depolyed - NO DIRECT CHANGES SHOULD BE MADE.
+	2. develop - for changes in master.
+	3. control - Master + data control endpoints.
+
+1. Master Branch
+-------------------
+ - Description: `master` contains all the public endpoints of the API. It is depoloyed to the server.
+ - Status: ONLINE
+ - API_URL: "https://eventomatic-api.herokuapp.com"
+ - Access: public
+ - EndPoints: 
+	1. GET "[API_URL]/" : Welcome message.
+
+	2. POST "[API_URL]/tickets/:util": marked <util> as recived/consumed for user(user ID must be provided in body of request in the form of JSON object).
+		- required body format: {"id": <Valid MongoDB Object ID>}
+		- Endpoint which is used by APP - OPEN Incase of App Failure.
+
+	3. GET "[API_URL]/attendees/": Get all attendees information with count.
+	4. GET "[API_URL]/attendees/c/:category": Get all attendees for <category> with count.
+	5. GET "[API_URL]/attendees/u/:util": Get all attendees who consumed/recived <util> with count.
+
+	6. GET "[API_URL]/categories": Get all categories of attendees with count.
+
+ - Manual backup data steps:
+	1. Hit Endpoint according to requirement.
+	2. Copy all JSON data.
+	3. Make local copy of JSON file.
+	4. Convert it to CSV with online tool(search "JSON to CSV" and you will find number of tools to do this job).
+
+
+
+3. Develop Branch
+--------------------
+ - Description: `develop` is made for changes in `master` branch. all the public changes should be done in `develop`
+		 and then punlished to `master`.
+ - status: OFFLINE
+ - API_URL: "http://localhost:5000" (Need to run local server)
+ - Access: private
+ - Endpoints: 
+	SAME AS MASTER BRANCH
+
+
+3. Control Branch
+--------------------
+ - Description: All the data management and manupulation stuff should be done here(BACKEND FOR ADMINs).
+ - Status: OFFLINE
+ - API_URL: "http://localhost:5000" (Need to run local server)
+ - Access: private
+ - Extra feature:
+	1. Data Importer - commented,
+	2. addOne Attendee - commented, 
+	3. Delete all users - commented
+	4. reset all utilities, 
+	5. rest particular utility,
+
+	6. Generate QR Codes - commented
+	7. Send Mail to all users with generation of QR codes. (NOT TESTED FOR UPDATED DATA) - Commented
+	
+**ACTUAL ENDPOINT INFORMATION WILL BE GIVEN ONLY TO LIMITED PERSON**
+
